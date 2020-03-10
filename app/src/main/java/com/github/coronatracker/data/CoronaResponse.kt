@@ -4,8 +4,8 @@ package com.github.coronatracker.data
 import com.google.gson.annotations.SerializedName
 
 data class CoronaResponse(
-    var brazil: List<BrazilResponse?>? = null,
-    var world: List<WorldResponse?>? = null
+    val brazil: MutableList<BrazilResponse> = mutableListOf(),
+    val world: MutableList<WorldResponse> = mutableListOf()
 ) {
     data class BrazilResponse(
         var date: String? = null, // 08/03/2020
