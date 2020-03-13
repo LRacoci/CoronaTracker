@@ -45,9 +45,7 @@ class MainFragment : Fragment(), CoroutineScope by MainScope() {
                     time.text = response.time
                     values.apply {
                         layoutManager = LinearLayoutManager(activity)
-                        adapter = response.values.filter{ value ->
-                            value.comments != null
-                        }.adapt(context, R.layout.value_response) { value ->
+                        adapter = response.values.adapt(context, R.layout.value_response) { value ->
                             value.cases?.let{
                                 cases.run {
                                     text = "$it ${if(it == 1) "caso" else "casos"}"
