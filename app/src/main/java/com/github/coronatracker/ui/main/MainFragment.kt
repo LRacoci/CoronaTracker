@@ -8,7 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.github.coronatracker.R
+import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.brazil_item.*
+import kotlinx.android.synthetic.main.brazil_item.view.*
 import kotlinx.android.synthetic.main.main_fragment.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
@@ -22,8 +24,10 @@ class MainFragment : Fragment(), CoroutineScope by MainScope() {
 
     private lateinit var viewModel: MainViewModel
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         return inflater.inflate(R.layout.main_fragment, container, false)
     }
 
@@ -32,28 +36,16 @@ class MainFragment : Fragment(), CoroutineScope by MainScope() {
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         launch {
             val brazilData = viewModel.getCoronaData().brazil
-            brazil_list.adapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-                override fun onCreateViewHolder(
-                    parent: ViewGroup,
-                    viewType: Int
-                ): RecyclerView.ViewHolder = object : RecyclerView.ViewHolder(parent) {
-                    init {
-                        LayoutInflater.from(context).inflate(R.layout.brazil_item, parent)
-                    }
-                }
-                fun bind(position: Int) {
-                    testShowItem.text = brazilData[position].toString()
-                }
-
-                override fun getItemCount(): Int = brazilData.size
-
-                override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) =
-                    bind(position)
-
+            val context = context ?: return@launch
+            brazil_list.adapter = brazilData.adapt(context, R.layout.brazil_item) {
+                testShowItem.text = it.toString()
             }
             message.text = viewModel.getCoronaData().toString()
         }
-        // TODO: Use the ViewModel
     }
 
 }
+
+
+
+
