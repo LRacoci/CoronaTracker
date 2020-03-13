@@ -43,8 +43,30 @@ class MainFragment : Fragment(), CoroutineScope by MainScope() {
                 adapter = data.brazil.adapt(context, R.layout.response) { response ->
                     date.text = response.date
                     time.text = response.time
-                    values_text.text = response.values.joinToString("\n") { value ->
-                           value.toString()
+                    values.apply {
+                        layoutManager = LinearLayoutManager(activity)
+                        adapter = response.values.filter{ value ->
+                            value.comments != null
+                        }.adapt(context, R.layout.value_response) { value ->
+                            value.cases?.let{
+                                cases.run {
+                                    text = "$it ${if(it == 1) "caso" else "casos"}"
+                                    visibility = View.VISIBLE
+                                }
+                            }
+                            value.comments?.let {
+                                comments.run {
+                                    text = it
+                                    visibility = View.VISIBLE
+                                }
+                            }
+                            value.suspects?.let{
+                                suspects.run{
+                                    text = "$it ${if(it == 1) "suspeito" else "suspeitos"}"
+                                    visibility = View.VISIBLE
+                                }
+                            }
+                        }
                     }
                 }
             }
